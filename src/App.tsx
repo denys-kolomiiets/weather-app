@@ -1,32 +1,57 @@
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+
+import { getWeatherData } from "./service/weatherService";
+import { ResponseData } from "./types/responseData.type";
+
 function App() {
-  // const cityCoordinates = `http://api.openweathermap.org/geo/1.0/direct?q=kyiv&appid=619c485f9412948c1be0d4bb8f4bea4c`
-  // const url = `https://api.openweathermap.org/data/2.5/weather?lat=50.4333&lon=30.5167&appid=619c485f9412948c1be0d4bb8f4bea4c`;
+  const [query, setQuery] = useState("");
+  const [weatherData, setWeatherData] = useState<ResponseData | null>(null);
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      const data = await getWeatherData("ukrainka");
+      setWeatherData(data);
+    };
+    fetchWeatherData();
+  }, []);
   return (
     <div className="app">
-      <div className="top">
-        <div className="location">
-          <p>Kyiv</p>
-        </div>
-        <div className="temp">
-          <h1>2°C</h1>
-        </div>
-        <div className="description">
-          <p>Clouds</p>
-        </div>
+      <div className="search">
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Enter Location"
+          type="text"
+        />
       </div>
-      <div className="bottom">
-        <div className="feels">
-          <p>-1°C</p>
+      {weatherData !== null && (
+        <div className="container">
+          <div className="top">
+            <div className="location">
+              <p>{weatherData.name}</p>
+            </div>
+            <div className="temp">
+              <h1>{weatherData.temp.toFixed()}°C</h1>
+            </div>
+            <div className="description">
+              <p>Clouds</p>
+            </div>
+          </div>
+          <div className="bottom">
+            <div className="feels">
+              <p>Feels like</p>
+              <p className="bold">{weatherData.feels_like.toFixed()}°C</p>
+            </div>
+            <div className="humidity">
+              <p>Humidity</p>
+              <p className="bold">{weatherData.humidity}%</p>
+            </div>
+            <div className="wind">
+              <p>Wind</p>
+              <p className="bold">{weatherData.speed.toFixed()}m/s</p>
+            </div>
+          </div>
         </div>
-        <div className="humidity">
-          <p>80%</p>
-        </div>
-        <div className="wind">
-          <p>15km/h</p>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
