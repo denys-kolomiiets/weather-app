@@ -54,7 +54,7 @@ h1 {
 
 .app:before {
   content: "";
-  background: url("./assets/sunset.jpg") no-repeat center center/cover;
+  background: url("./assets/weather-app-bg.jpg") no-repeat center center/cover;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -65,11 +65,11 @@ h1 {
 
 .container {
   max-width: 700px;
+  width: 100%;
   height: 600px;
   margin: auto;
   padding: 0 1rem;
   position: relative;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -82,9 +82,9 @@ h1 {
 
 .app .description {
   position: relative;
-  right: -90%;
+  left: 95%;
   transform-origin: 0 0;
-  transform: rotate(269deg);
+  transform: rotate(-90deg);
 }
 
 .app .bottom {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 
 import { getWeatherData } from "./service/weatherService";
 import { ResponseData } from "./types/responseData.type";
@@ -13,6 +13,16 @@ function App() {
     };
     fetchWeatherData();
   }, []);
+
+  const handleSubmit = async (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (query && query.length > 0) {
+        const data = await getWeatherData(query);
+        setWeatherData(data);
+      }
+      setQuery("");
+    }
+  };
   return (
     <div className="app">
       <div className="search">
@@ -21,6 +31,7 @@ function App() {
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Enter Location"
           type="text"
+          onKeyDown={handleSubmit}
         />
       </div>
       {weatherData !== null && (
@@ -31,9 +42,10 @@ function App() {
             </div>
             <div className="temp">
               <h1>{weatherData.temp.toFixed()}°C</h1>
+              <img src={weatherData.iconURL} alt="weather_icon" />
             </div>
             <div className="description">
-              <p>Clouds</p>
+              <p>{weatherData.description}</p>
             </div>
           </div>
           <div className="bottom">
